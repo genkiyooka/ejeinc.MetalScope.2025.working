@@ -6,24 +6,23 @@
 //  Copyright © 2017 eje Inc. All rights reserved.
 //
 
-import GLKit
 import CoreMotion
 
-extension Rotation {
-    public init(_ cmQuaternion: CMQuaternion) {
-        self.init(GLKQuaternionMake(
-            Float(cmQuaternion.x),
-            Float(cmQuaternion.y),
-            Float(cmQuaternion.z),
-            Float(cmQuaternion.w)
+extension DeviceRotation {
+    public init(deviceQuaternion: CMQuaternion) {
+        self.init(nativeQuaternion:NativeQuaternionMake(
+            Float(deviceQuaternion.x),
+            Float(deviceQuaternion.y),
+            Float(deviceQuaternion.z),
+            Float(deviceQuaternion.w)
         ))
     }
 
-    public init(_ cmAttitude: CMAttitude) {
-        self.init(cmAttitude.quaternion)
+    public init(deviceAttitude: CMAttitude) {
+        self.init(deviceQuaternion:deviceAttitude.quaternion)
     }
 
-    public init(_ cmDeviceMotion: CMDeviceMotion) {
-        self.init(cmDeviceMotion.attitude)
+    public init(deviceMotion: CMDeviceMotion) {
+        self.init(deviceAttitude:deviceMotion.attitude)
     }
 }

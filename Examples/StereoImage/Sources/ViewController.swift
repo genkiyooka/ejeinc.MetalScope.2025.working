@@ -94,6 +94,7 @@ final class ViewController: UIViewController {
         return .lightContent
     }
 
+    @objc
     func presentStereoView() {
         let introView = UILabel()
         introView.text = "Place your phone into your Cardboard viewer."

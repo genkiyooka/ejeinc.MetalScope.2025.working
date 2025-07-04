@@ -58,15 +58,15 @@ public final class OrientationNode: SCNNode {
             return
         }
 
-        var rotation = Rotation()
+        var rotation = DeviceRotation()
 
         switch interfaceOrientation {
         case .portraitUpsideDown:
-            rotation.rotate(byZ: .pi)
+            rotation = rotation.rotated(byZ: .pi)
         case .landscapeLeft:
-            rotation.rotate(byZ: .pi / 2)
+            rotation = rotation.rotated(byZ: .pi / 2)
         case .landscapeRight:
-            rotation.rotate(byZ: .pi / -2)
+            rotation = rotation.rotated(byZ: .pi / -2)
         default:
             break
         }
@@ -88,8 +88,8 @@ public final class OrientationNode: SCNNode {
     }
 
     public func resetRotation() {
-        let r1 = Rotation(pointOfView.presentation.worldTransform).inverted()
-        let r2 = Rotation(referenceRotationNode.presentation.worldTransform)
+        let r1 = DeviceRotation(pointOfView.presentation.worldTransform).inverted()
+        let r2 = DeviceRotation(referenceRotationNode.presentation.worldTransform)
         let r3 = r1 * r2
         referenceRotationNode.transform = r3.scnMatrix4
 

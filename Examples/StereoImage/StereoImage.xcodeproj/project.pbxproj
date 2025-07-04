@@ -151,6 +151,7 @@
 				TargetAttributes = {
 					BF1453111E322A440042598E = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = E35RT582A5;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -160,6 +161,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -289,6 +291,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -335,6 +338,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -342,15 +346,16 @@
 		BF1453251E322A440042598E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = E35RT582A5;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				INFOPLIST_KEY_CFBundleDisplayName = StereoImage;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.eje-c.MetalScope.StereoImage";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.genkiyooka.MetalScope.StereoImage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -358,15 +363,16 @@
 		BF1453261E322A440042598E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = E35RT582A5;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				INFOPLIST_KEY_CFBundleDisplayName = StereoImage;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.eje-c.MetalScope.StereoImage";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.genkiyooka.MetalScope.StereoImage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

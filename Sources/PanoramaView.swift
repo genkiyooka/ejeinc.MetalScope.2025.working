@@ -149,7 +149,8 @@ extension PanoramaView {
         panGestureManager.stopAnimations()
         orientationNode.setNeedsResetRotation(animated: animated)
     }
-
+    
+    @objc
     public func setNeedsResetRotation(_ sender: Any?) {
         setNeedsResetRotation(animated: true)
     }

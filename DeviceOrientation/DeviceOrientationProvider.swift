@@ -9,7 +9,7 @@
 import CoreMotion
 
 public protocol DeviceOrientationProvider {
-    func deviceOrientation(atTime time: TimeInterval) -> Rotation?
+    func deviceOrientation(atTime time: TimeInterval) -> DeviceRotation?
     func shouldWaitDeviceOrientation(atTime time: TimeInterval) -> Bool
 }
 
@@ -27,7 +27,8 @@ extension DeviceOrientationProvider {
 
         let queue = DispatchQueue(label: "com.eje-c.MetalScope.DeviceOrientationProvider.waitingQueue")
         let timer = DispatchSource.makeTimerSource(queue: queue)
-        timer.scheduleRepeating(deadline: .now(), interval: .milliseconds(10))
+//        timer.scheduleRepeating(deadline: .now(), interval: .milliseconds(10))
+        timer.schedule(deadline: .now(), repeating: .milliseconds(10))
         timer.setEventHandler {
             guard let _ = self.deviceOrientation(atTime: time) else {
                 return
@@ -42,7 +43,7 @@ extension DeviceOrientationProvider {
 }
 
 extension CMMotionManager: DeviceOrientationProvider {
-    public func deviceOrientation(atTime time: TimeInterval) -> Rotation? {
+    public func deviceOrientation(atTime time: TimeInterval) -> DeviceRotation? {
         guard let motion = deviceMotion else {
             return nil
         }
@@ -53,19 +54,16 @@ extension CMMotionManager: DeviceOrientationProvider {
             return nil
         }
 
-        var rotation = Rotation(motion)
+        var rotation = DeviceRotation(deviceMotion:motion)
 
         if timeInterval > 0 {
             let rx = motion.rotationRate.x * timeInterval
             let ry = motion.rotationRate.y * timeInterval
             let rz = motion.rotationRate.z * timeInterval
-
-            rotation.rotate(byX: Float(rx))
-            rotation.rotate(byY: Float(ry))
-            rotation.rotate(byZ: Float(rz))
+            rotation = rotation.rotated(byX: Float(rx)).rotated(byY:Float(ry)).rotated(byZ:Float(rz))
         }
 
-        let reference = Rotation(x: .pi / 2)
+        let reference = DeviceRotation(x: .pi / 2)
 
         return reference.inverted() * rotation.normalized()
     }
@@ -113,7 +111,7 @@ internal final class DefaultDeviceOrientationProvider: DeviceOrientationProvider
         DefaultDeviceOrientationProvider.decrementInstanceCount()
     }
 
-    func deviceOrientation(atTime time: TimeInterval) -> Rotation? {
+    func deviceOrientation(atTime time: TimeInterval) -> DeviceRotation? {
         return DefaultDeviceOrientationProvider.motionManager.deviceOrientation(atTime: time)
     }
 

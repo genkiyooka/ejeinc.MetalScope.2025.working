@@ -6,26 +6,30 @@
 //  Copyright © 2017 eje Inc. All rights reserved.
 //
 
-import GLKit
+public struct DeviceRotation {
+    
+    public var matrix: RotationMatrix3
 
-public struct Rotation {
-    public var matrix: GLKMatrix3
+    public init(_ matrix: RotationMatrix3 = RotationMatrix3Identity()) {
+        self.matrix = matrix
+    }
 
-    public init(matrix: GLKMatrix3 = GLKMatrix3Identity) {
+    public init(matrix: RotationMatrix3) {
         self.matrix = matrix
     }
 }
 
-extension Rotation {
-    public static let identity = Rotation()
+extension DeviceRotation {
+    public static let identity = DeviceRotation()
 }
 
-extension Rotation {
-    public init(_ glkMatrix3: GLKMatrix3) {
-        self.init(matrix: glkMatrix3)
+extension DeviceRotation {
+
+    public init(nativeMatrix3: RotationMatrix3) {
+        self.init(matrix: nativeMatrix3)
     }
 
-    public var glkMatrix3: GLKMatrix3 {
+    public var nativeMatrix3: RotationMatrix3 {
         get {
             return matrix
         }
@@ -35,107 +39,139 @@ extension Rotation {
     }
 }
 
-extension Rotation {
-    public init(_ glkQuaternion: GLKQuaternion) {
-        self.init(GLKMatrix3MakeWithQuaternion(glkQuaternion))
+extension DeviceRotation {
+    public init(nativeQuaternion: RotationQuaternion) {
+        self.init(RotationMatrix3MakeWithQuaternion(nativeQuaternion))
     }
 
-    public var glkQuartenion: GLKQuaternion {
+    public var nativeQuarternion: RotationQuaternion {
         get {
-            return GLKQuaternionMakeWithMatrix3(glkMatrix3)
+            return RotationQuaternionMakeWithMatrix3(self.nativeMatrix3)
         }
         set(value) {
-            glkMatrix3 = GLKMatrix3MakeWithQuaternion(value)
+            self.nativeMatrix3 = RotationMatrix3MakeWithQuaternion(value)
         }
     }
 }
 
-extension Rotation {
-    public init(radians: Float, aroundVector vector: GLKVector3) {
-        self.init(GLKMatrix3MakeRotation(radians, vector.x, vector.y, vector.z))
+extension DeviceRotation {
+    public init(radians: Float, aroundVector vector: RotationVector3) {
+        self.init(matrix:RotationMatrix3MakeRotation(radians, vector.x, vector.y, vector.z))
     }
 
     public init(x: Float) {
-        self.init(GLKMatrix3MakeXRotation(x))
+        self.init(matrix:RotationMatrix3MakeXRotation(x))
     }
 
     public init(y: Float) {
-        self.init(GLKMatrix3MakeYRotation(y))
+        self.init(matrix:RotationMatrix3MakeYRotation(y))
     }
 
     public init(z: Float) {
-        self.init(GLKMatrix3MakeZRotation(z))
+        self.init(matrix:RotationMatrix3MakeZRotation(z))
     }
 }
 
-extension Rotation {
-    public mutating func rotate(byRadians radians: Float, aroundAxis axis: GLKVector3) {
-        glkMatrix3 = GLKMatrix3RotateWithVector3(glkMatrix3, radians, axis)
+extension DeviceRotation {
+    private mutating func rotate(byRadians radians: Float, aroundAxis axis: RotationVector3) {
+        self.matrix = RotationMatrix3RotateWithVector3(self.nativeMatrix3, radians, axis)
     }
 
-    public mutating func rotate(byX radians: Float) {
-        glkMatrix3 = GLKMatrix3RotateX(glkMatrix3, radians)
+    private mutating func rotate(byX radians: Float) {
+        self.matrix = RotationMatrix3RotateX(self.nativeMatrix3, radians)
     }
 
-    public mutating func rotate(byY radians: Float) {
-        glkMatrix3 = GLKMatrix3RotateY(glkMatrix3, radians)
+    private mutating func rotate(byY radians: Float) {
+        self.matrix = RotationMatrix3RotateY(self.nativeMatrix3, radians)
     }
 
-    public mutating func rotate(byZ radians: Float) {
-        glkMatrix3 = GLKMatrix3RotateZ(glkMatrix3, radians)
+    private mutating func rotate(byZ radians: Float) {
+        self.matrix = RotationMatrix3RotateZ(self.nativeMatrix3, radians)
     }
 
-    public mutating func invert() {
-        glkQuartenion = GLKQuaternionInvert(glkQuartenion)
+	public func rotated(byRadians radians: Float, aroundAxis axis: RotationVector3) -> DeviceRotation {
+	let matrix = RotationMatrix3RotateWithVector3(self.nativeMatrix3, radians, axis)
+		return DeviceRotation(matrix: matrix)
     }
 
-    public mutating func normalize() {
-        glkQuartenion = GLKQuaternionNormalize(glkQuartenion)
-    }
-}
-
-extension Rotation {
-    public func rotated(byRadians radians: Float, aroundAxis axis: GLKVector3) -> Rotation {
-        var r = self
-        r.rotate(byRadians: radians, aroundAxis: axis)
-        return r
+    public func rotated(byX radians: Float) -> DeviceRotation {
+    let matrix = RotationMatrix3RotateX(self.nativeMatrix3, radians)
+		return DeviceRotation(matrix: matrix)
     }
 
-    public func rotated(byX x: Float) -> Rotation {
-        var r = self
-        r.rotate(byX: x)
-        return r
+    public func rotated(byY radians: Float) -> DeviceRotation {
+	let matrix = RotationMatrix3RotateY(self.nativeMatrix3, radians)
+		return DeviceRotation(matrix: matrix)
     }
 
-    public func rotated(byY y: Float) -> Rotation {
-        var r = self
-        r.rotate(byY: y)
-        return r
-    }
-
-    public func rotated(byZ z: Float) -> Rotation {
-        var r = self
-        r.rotate(byZ: z)
-        return r
-    }
-
-    public func inverted() -> Rotation {
-        var r = self
-        r.invert()
-        return r
-    }
-
-    public func normalized() -> Rotation {
-        var r = self
-        r.normalize()
-        return r
+    public func rotated(byZ radians: Float) -> DeviceRotation {
+    let matrix = RotationMatrix3RotateZ(self.nativeMatrix3, radians)
+		return DeviceRotation(matrix: matrix)
     }
 }
 
-public func * (lhs: Rotation, rhs: Rotation) -> Rotation {
-    return Rotation(GLKMatrix3Multiply(lhs.glkMatrix3, rhs.glkMatrix3))
+extension DeviceRotation {
+    private mutating func invert() {
+        self.nativeQuarternion = RotationQuaternionInvert(self.nativeQuarternion)
+    }
+
+    private mutating func normalize() {
+        self.nativeQuarternion = RotationQuaternionNormalize(self.nativeQuarternion)
+    }
+
+    public func inverted() -> DeviceRotation {
+    let nativeQuarternion = RotationQuaternionInvert(self.nativeQuarternion)
+		return DeviceRotation(nativeQuaternion: nativeQuarternion)
+    }
+
+    public func normalized() -> DeviceRotation {
+    let nativeQuarternion = RotationQuaternionNormalize(self.nativeQuarternion)
+		return DeviceRotation(nativeQuaternion: nativeQuarternion)
+    }
 }
 
-public func * (lhs: Rotation, rhs: GLKVector3) -> GLKVector3 {
-    return GLKMatrix3MultiplyVector3(lhs.glkMatrix3, rhs)
+extension DeviceRotation {
+//    public func rotated(byRadians radians: Float, aroundAxis axis: RotationVector3) -> DeviceRotation {
+//        var r = self
+//        r.rotate(byRadians: radians, aroundAxis: axis)
+//        return r
+//    }
+//
+//    public func rotated(byX x: Float) -> DeviceRotation {
+//        var r = self
+//        r.rotate(byX: x)
+//        return r
+//    }
+//
+//    public func rotated(byY y: Float) -> DeviceRotation {
+//        var r = self
+//        r.rotate(byY: y)
+//        return r
+//    }
+//
+//    public func rotated(byZ z: Float) -> DeviceRotation {
+//        var r = self
+//        r.rotate(byZ: z)
+//        return r
+//    }
+//
+//    public func inverted() -> DeviceRotation {
+//        var r = self
+//        r.invert()
+//        return r
+//    }
+//
+//    public func normalized() -> DeviceRotation {
+//        var r = self
+//        r.normalize()
+//        return r
+//    }
+}
+
+public func * (lhs: DeviceRotation, rhs: DeviceRotation) -> DeviceRotation {
+    return DeviceRotation(matrix:RotationMatrix3Multiply(lhs.matrix, rhs.matrix))
+}
+
+public func * (lhs: DeviceRotation, rhs: RotationVector3) -> RotationVector3 {
+    return Rotation3MultiplyVector3(lhs.matrix, rhs)
 }

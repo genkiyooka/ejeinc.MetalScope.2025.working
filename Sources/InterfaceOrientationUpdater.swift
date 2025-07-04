@@ -9,88 +9,59 @@
 import SceneKit
 import UIKit
 
-internal final class InterfaceOrientationUpdater {
+internal final class InterfaceOrientationUpdater : InterfaceOrientationObserver {
     let orientationNode: OrientationNode
-
-    private var isTransitioning = false
-    private var deviceOrientationDidChangeNotificationObserver: NSObjectProtocol?
 
     init(orientationNode: OrientationNode) {
         self.orientationNode = orientationNode
     }
 
-    deinit {
-        stopAutomaticInterfaceOrientationUpdates()
-    }
-
-    func updateInterfaceOrientation() {
+    override func onUpdateInterfaceOrientation() {
         orientationNode.updateInterfaceOrientation()
     }
 
-    func updateInterfaceOrientation(with transitionCoordinator: UIViewControllerTransitionCoordinator) {
-        isTransitioning = true
+    override func onUpdateInterfaceOrientationTransition(context: any UIViewControllerTransitionCoordinatorContext) {
+        SCNTransaction.lock()
+        SCNTransaction.begin()
+        SCNTransaction.animationDuration = context.transitionDuration
+        SCNTransaction.animationTimingFunction = context.completionCurve.caMediaTimingFunction
+        SCNTransaction.disableActions = !context.isAnimated
 
-        transitionCoordinator.animate(alongsideTransition: { context in
-            SCNTransaction.lock()
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = context.transitionDuration
-            SCNTransaction.animationTimingFunction = context.completionCurve.caMediaTimingFunction
-            SCNTransaction.disableActions = !context.isAnimated
+        self.updateInterfaceOrientation();
 
-            self.updateInterfaceOrientation()
-
-            SCNTransaction.commit()
-            SCNTransaction.unlock()
-        }, completion: { _ in
-            self.isTransitioning = false
-        })
-    }
-
-    func startAutomaticInterfaceOrientationUpdates() {
-        guard deviceOrientationDidChangeNotificationObserver == nil else {
-            return
+        SCNTransaction.commit()
+        SCNTransaction.unlock()
         }
 
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-
-        let observer = NotificationCenter.default.addObserver(forName: .UIDeviceOrientationDidChange, object: nil, queue: .main) { [weak self] _ in
-            guard UIDevice.current.orientation.isValidInterfaceOrientation, self?.isTransitioning == false else {
-                return
-            }
-            self?.updateInterfaceOrientation()
-        }
-
-        deviceOrientationDidChangeNotificationObserver = observer
-    }
-
-    func stopAutomaticInterfaceOrientationUpdates() {
-        guard let observer = deviceOrientationDidChangeNotificationObserver else {
-            return
-        }
-
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
-
-        NotificationCenter.default.removeObserver(observer)
-
-        deviceOrientationDidChangeNotificationObserver = nil
-    }
 }
 
-private extension UIViewAnimationCurve {
+private extension UIView.AnimationCurve {
     var caMediaTimingFunction: CAMediaTimingFunction {
         let name: String
 
         switch self {
         case .easeIn:
-            name = kCAMediaTimingFunctionEaseIn
+            name = convertFromCAMediaTimingFunctionName(CAMediaTimingFunctionName.easeIn)
         case .easeOut:
-            name = kCAMediaTimingFunctionEaseOut
+            name = convertFromCAMediaTimingFunctionName(CAMediaTimingFunctionName.easeOut)
         case .easeInOut:
-            name = kCAMediaTimingFunctionEaseInEaseOut
+            name = convertFromCAMediaTimingFunctionName(CAMediaTimingFunctionName.easeInEaseOut)
         case .linear:
-            name = kCAMediaTimingFunctionLinear
+            name = convertFromCAMediaTimingFunctionName(CAMediaTimingFunctionName.linear)
+        @unknown default:
+            name = convertFromCAMediaTimingFunctionName(CAMediaTimingFunctionName.linear)
         }
         
-        return CAMediaTimingFunction(name: name)
+        return CAMediaTimingFunction(name: convertToCAMediaTimingFunctionName(name))
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCAMediaTimingFunctionName(_ input: CAMediaTimingFunctionName) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCAMediaTimingFunctionName(_ input: String) -> CAMediaTimingFunctionName {
+	return CAMediaTimingFunctionName(rawValue: input)
 }
