@@ -151,7 +151,6 @@
 				TargetAttributes = {
 					BFB8923F1E2F9CFF00FA9129 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = E35RT582A5;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -352,7 +351,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = E35RT582A5;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MonoImage;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
@@ -369,7 +368,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = E35RT582A5;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = MonoImage;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;

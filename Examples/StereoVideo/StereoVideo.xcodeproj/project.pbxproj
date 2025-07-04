@@ -362,7 +362,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = E35RT582A5;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = StereoVideo;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -380,7 +380,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = E35RT582A5;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = StereoVideo;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
