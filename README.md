@@ -1,3 +1,9 @@
+# MetalScope 2025 Update
+
+- Conversion to Swift 5
+- Remove dependency on deprecated GLKit
+- Implement 3D math with simd library
+
 # MetalScope
 
 ![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat) ![CocoaPods compatible](https://img.shields.io/cocoapods/v/MetalScope.svg) ![Swift 3.0.x](https://img.shields.io/badge/Swift-3.1.x-orange.svg)
